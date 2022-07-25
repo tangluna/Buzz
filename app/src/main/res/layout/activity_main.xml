@@ -21,6 +21,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="false"
+            android:text="Send me notifs on the order of..." />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -33,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingRight="1dp"
-                android:text="1s*" />
+                android:text="secs*" />
 
             <Switch
                 android:id="@+id/min"
@@ -41,30 +49,33 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:text="1m**" />
+                android:text="mins**" />
 
             <Switch
                 android:id="@+id/hour"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:paddingLeft="3dp"
-                android:text="1h" />
+                android:text="hours" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="wrap_content"
+            android:layout_width="310dp"
             android:layout_height="wrap_content"
-            android:text="*will switch to 1m after 30s, then 1h after 30m"
-            android:textAlignment="center" />
+            android:singleLine="false"
+            android:text="*Will switch to minute order after 30 notifs, and then hour order after 30 more. Will not work without permissions granted in settings on newer versions of Android."
+            android:textAlignment="textStart" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="**will switch to 1h after 30m"
-            android:textAlignment="center" />
+            android:paddingTop="5dp"
+            android:singleLine="false"
+            android:text="**Will switch to hour order after 30 notifs"
+            android:textAlignment="textStart" />
 
     </LinearLayout>
 

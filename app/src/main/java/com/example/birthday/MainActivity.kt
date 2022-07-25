@@ -18,6 +18,10 @@ import androidx.core.app.NotificationManagerCompat
 
 class MainActivity : AppCompatActivity() {
 
+ /*   companion object {
+        val enabled = mapOf(0..25 to 1)
+    } */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -48,15 +52,23 @@ class MainActivity : AppCompatActivity() {
         secSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                val intent = Intent(this, MyAlarm::class.java).setAction("second")
-                val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                alarmManager.setRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(),
-                    1000,
-                    pendingIntent
-                )
-                Toast.makeText(applicationContext, "sec al set", Toast.LENGTH_SHORT).show()
+                if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        alarmManager.canScheduleExactAlarms()
+                    } else {
+                        true
+                    }
+                ) {
+                    val intent = Intent(this, MyAlarm::class.java).setAction("second")
+                    val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
+                    alarmManager.setExact(
+                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        SystemClock.elapsedRealtime() + 1000,
+                        pendingIntent
+                    )
+                } else {
+                    Toast.makeText(applicationContext, "Cannot use this setting without enabling Alarm permissions.", Toast.LENGTH_SHORT).show()
+                    secSwitch.toggle()
+                }
 
                 if (minSwitch.isChecked) {
                     minSwitch.toggle()
@@ -68,21 +80,18 @@ class MainActivity : AppCompatActivity() {
                 val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 val intent = Intent(this, MyAlarm::class.java).setAction("second")
                 val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                 alarmManager.cancel(pendingIntent)
 
                 if (!minSwitch.isChecked) {
                     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent = Intent(this, MyAlarm::class.java).setAction("minute")
                     val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                    Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                     alarmManager.cancel(pendingIntent)
                 }
                 if (!hourSwitch.isChecked) {
                     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent = Intent(this, MyAlarm::class.java).setAction("hour")
                     val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                    Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                     alarmManager.cancel(pendingIntent)
                 }
             }
@@ -99,7 +108,6 @@ class MainActivity : AppCompatActivity() {
                     60*1000,
                     pendingIntent
                 )
-                Toast.makeText(applicationContext, "min al set", Toast.LENGTH_SHORT).show()
 
                 if (secSwitch.isChecked) {
                     secSwitch.toggle()
@@ -111,21 +119,18 @@ class MainActivity : AppCompatActivity() {
                 val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 val intent = Intent(this, MyAlarm::class.java).setAction("minute")
                 val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                 alarmManager.cancel(pendingIntent)
 
                 if (!secSwitch.isChecked) {
                     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent = Intent(this, MyAlarm::class.java).setAction("second")
                     val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                    Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                     alarmManager.cancel(pendingIntent)
                 }
                 if (!hourSwitch.isChecked) {
                     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent = Intent(this, MyAlarm::class.java).setAction("hour")
                     val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                    Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                     alarmManager.cancel(pendingIntent)
                 }
             }
@@ -142,7 +147,6 @@ class MainActivity : AppCompatActivity() {
                     3600*1000,
                     pendingIntent
                 )
-                Toast.makeText(applicationContext, "hr al set", Toast.LENGTH_SHORT).show()
 
                 if (minSwitch.isChecked) {
                     minSwitch.toggle()
@@ -154,21 +158,18 @@ class MainActivity : AppCompatActivity() {
                 val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 val intent = Intent(this, MyAlarm::class.java).setAction("hour")
                 val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                 alarmManager.cancel(pendingIntent)
 
                 if (!secSwitch.isChecked) {
                     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent = Intent(this, MyAlarm::class.java).setAction("second")
                     val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                    Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                     alarmManager.cancel(pendingIntent)
                 }
                 if (!minSwitch.isChecked) {
                     val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
                     val intent = Intent(this, MyAlarm::class.java).setAction("minute")
                     val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0)
-                    Toast.makeText(this, "Canceling", Toast.LENGTH_SHORT).show()
                     alarmManager.cancel(pendingIntent)
                 }
             }

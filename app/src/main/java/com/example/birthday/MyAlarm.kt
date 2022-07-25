@@ -21,13 +21,43 @@ class MyAlarm : BroadcastReceiver() {
         var secToMinThresh = -1
         var minToHourThresh = -1
         var prevIntentAction = ""
+        val doofEntriesIndices = 0..25
+        val doofEntriesTitle = "Placeholder Notif Title"
+        val doofMessages =  listOf(
+            "Placeholder!",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Hiiiiiiiiiiiiiiiiiiiiiiiiiiii",
+            "Hihihihihihihihihihihihi",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "Placeholder",
+            "ababababababababa"
+        )
     }
     override fun onReceive(
         context: Context,
         intent: Intent
     ) {
 
-        Toast.makeText(context, "Alarm! " + notifNum + intent.action, Toast.LENGTH_SHORT).show()
         if (prevIntentAction != intent.action) {
             // either starting or switching frequency
             if (intent.action.toString() == "second") {
@@ -43,11 +73,11 @@ class MyAlarm : BroadcastReceiver() {
             }
             prevIntentAction = intent.action.toString()
         }
-
+        val messageNum = doofEntriesIndices.random()
         var builder = NotificationCompat.Builder(context, "Recurring Notif")
             .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle("Hi!" + notifNum + intent.action)
-            .setContentText("ababababababababa")
+            .setContentTitle(doofEntriesTitle)
+            .setContentText(doofMessages.elementAt(messageNum))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         with(NotificationManagerCompat.from(context)) {
@@ -57,24 +87,28 @@ class MyAlarm : BroadcastReceiver() {
 
         incNotifNum()
 
-        if (secToMinThresh != -1 && notifNum >= secToMinThresh) {
-            minToHourThresh = notifNum + 30
-            secToMinThresh = -1
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            var pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                PendingIntent.FLAG_NO_CREATE)
-            if (pendingIntent != null && alarmManager != null) {
-                Toast.makeText(context, "Canceling", Toast.LENGTH_SHORT).show()
-                alarmManager.cancel(pendingIntent)
+        if (secToMinThresh != -1) {
+            if (notifNum >= secToMinThresh) {
+                minToHourThresh = notifNum + 30
+                secToMinThresh = -1
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val pendingIntent = PendingIntent.getBroadcast(context, 0, intent.setAction("minute"),
+                    PendingIntent.FLAG_NO_CREATE)
+                alarmManager.setRepeating(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime(),
+                    60*1000,
+                    pendingIntent
+                )
+            } else {
+                val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+                alarmManager.setExact(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + 1000,
+                    pendingIntent
+                )
             }
-            pendingIntent = PendingIntent.getBroadcast(context, 0, intent.setAction("minute"),
-                PendingIntent.FLAG_NO_CREATE)
-            alarmManager.setRepeating(
-                AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime(),
-                60*1000,
-                pendingIntent
-            )
         } else if (minToHourThresh != -1 && notifNum >= minToHourThresh) {
             minToHourThresh = -1
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -93,16 +127,5 @@ class MyAlarm : BroadcastReceiver() {
                 pendingIntent
             )
         }
-
-    /*    if (notifNum >= 2) {
-            Toast.makeText(context, "if statement", Toast.LENGTH_SHORT).show()
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-                    PendingIntent.FLAG_NO_CREATE)
-            if (pendingIntent != null && alarmManager != null) {
-                Toast.makeText(context, "Canceling", Toast.LENGTH_SHORT).show()
-                alarmManager.cancel(pendingIntent)
-            }
-        }*/
     }
 }
