@@ -22,8 +22,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
             android:minHeight="48dp"
             android:orientation="horizontal">
 
@@ -53,9 +54,9 @@
 
         <TextView
             android:id="@+id/textView3"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="*will switch to 1m after 30s"
+            android:text="*will switch to 1m after 30s, then 1h after 30m"
             android:textAlignment="center" />
 
         <TextView
